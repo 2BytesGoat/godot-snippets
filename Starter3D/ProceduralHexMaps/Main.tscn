@@ -1,0 +1,23 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Board/HexTiles.tres" type="MeshLibrary" id=1]
+[ext_resource path="res://HexBoard.gd" type="Script" id=2]
+
+[node name="Main" type="Spatial"]
+
+[node name="Camera" type="Camera" parent="."]
+transform = Transform( 1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 4, 5 )
+
+[node name="HexBoard" type="GridMap" parent="."]
+mesh_library = ExtResource( 1 )
+cell_size = Vector3( 0.87, 1, 0.5 )
+cell_center_x = false
+cell_center_y = false
+cell_center_z = false
+data = {
+"cells": PoolIntArray(  )
+}
+script = ExtResource( 2 )
+__meta__ = {
+"_editor_clip_": 0
+}
