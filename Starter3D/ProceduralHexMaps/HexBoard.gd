@@ -5,12 +5,13 @@ var num_colors := 1
 
 export var hex_rows := 7
 export var hex_cols := 5
+export var hex_cols_min := 3
 
 func _ready():
 	num_colors = len(mesh_library.get_item_list())
 	cell_size.x = stepify(TILE_HEIGHT * cos(deg2rad(30)), 0.01)
 	cell_size.z = TILE_HEIGHT / 2.0
-	_generate_square_grid()
+	_generate_hex_grid()
 
 func _generate_square_grid():
 	var x_shift = hex_cols * cell_size.x
@@ -21,6 +22,21 @@ func _generate_square_grid():
 		for x in zc_range:
 			x = x * x_shift + y % 2
 			set_cell_item(x, 0, y, y % num_colors)
+
+func _generate_hex_grid():
+	for step in range(3):
+		var cols_min = hex_cols_min - max(step-1, 0)
+		_fill_hex_grid(hex_cols-step, cols_min, step)
+
+func _fill_hex_grid(_cols, min_cols, shift):
+	for y in range(_cols - min_cols + 1):
+		for x in _get_zero_centered_range(_cols - y):
+			var x_shift = stepify(cell_size.x * (_cols - y) / 2, 0.01)
+			var x_pos = x * x_shift * 2
+			var y_pos = y * 3 + shift
+			var mirror_color = 1 + shift % (num_colors - 1) if shift else shift
+			set_cell_item(x_pos, 0,  y_pos, shift % num_colors)
+			set_cell_item(x_pos, 0, -y_pos, mirror_color)
 
 func _get_zero_centered_range(n: int):
 	var array = []
