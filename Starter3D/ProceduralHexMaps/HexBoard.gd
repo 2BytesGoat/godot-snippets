@@ -1,6 +1,7 @@
 extends GridMap
 
-const TILE_HEIGHT := 1
+var tile_size = null
+var tile_height := 1
 var num_colors := 1
 
 export var hex_rows := 7
@@ -8,10 +9,13 @@ export var hex_cols := 5
 export var hex_cols_min := 3
 
 func _ready():
+	tile_size = mesh_library.get_item_mesh(0).get_aabb().size
+	tile_height = tile_size.z
+	
 	num_colors = len(mesh_library.get_item_list())
-	cell_size.x = stepify(TILE_HEIGHT * cos(deg2rad(30)), 0.01)
-	cell_size.z = TILE_HEIGHT / 2.0
-	_generate_hex_grid()
+	cell_size.x = stepify(tile_height * cos(deg2rad(30)), 0.01)
+	cell_size.z = tile_height / 2.0
+	_generate_square_grid()
 
 func _generate_square_grid():
 	var x_shift = hex_cols * cell_size.x
